@@ -22,7 +22,7 @@ function SPACrawler(options) {
     this.createCrawler();
 }
 
-SPACrawler.prototype.start = function () {
+SPACrawler.prototype.start = function() {
     this.startRndr();
     // Wait to start crawler until rndr server is ready
     // It should be ready in 2 seconds but doesn't emit
@@ -31,11 +31,11 @@ SPACrawler.prototype.start = function () {
     return this;
 };
 
-SPACrawler.prototype.startRndr = function () {
+SPACrawler.prototype.startRndr = function() {
     var args = [path.join(__dirname, './node_modules/rndr-me/server.js')];
 
     // Make args like `--key value` for spawned process
-    _.each(this.rndrOptions, function (val, key) {
+    _.each(this.rndrOptions, function(val, key) {
         args.push('--' + key);
         args.push(val);
     });
@@ -46,21 +46,23 @@ SPACrawler.prototype.startRndr = function () {
     process.on('exit', this.killRndr.bind(this));
 };
 
-SPACrawler.prototype.logRndr = function (data) {
-    var msg = data.toString().toLowerCase();
+SPACrawler.prototype.logRndr = function(data) {
+    console.log('[RNDR.ME]', data.toString());
+
+    // var msg = data.toString().toLowerCase();
     // rndr-me only logs anything for errors
-    throw new Error('rndr-me ' + msg);
+    // throw new Error('rndr-me ' + msg);
 };
 
-SPACrawler.prototype.killRndr = function () {
+SPACrawler.prototype.killRndr = function() {
     this.rndr.kill();
 };
 
-SPACrawler.prototype.emitURL = function (queueItem) {
+SPACrawler.prototype.emitURL = function(queueItem) {
     this._crawler.crawler.emit('spaurl', this._crawler.parseQueueItem(queueItem));
 };
 
-SPACrawler.prototype.createCrawler = function () {
+SPACrawler.prototype.createCrawler = function() {
     this._crawler = new Crawler({
         port: this.rndrOptions.port,
         app: this.appOptions,
@@ -68,7 +70,7 @@ SPACrawler.prototype.createCrawler = function () {
     });
 };
 
-SPACrawler.prototype.startCrawler = function () {
+SPACrawler.prototype.startCrawler = function() {
     // Listen to events to get all the urls in the app
     this._crawler.crawler.on('queueadd', this.emitURL.bind(this));
     this._crawler.crawler.on('initialpath', this.emitURL.bind(this));
@@ -77,7 +79,7 @@ SPACrawler.prototype.startCrawler = function () {
 
 // Make our crawler easily accessible
 Object.defineProperty(SPACrawler.prototype, 'crawler', {
-    get: function () {
+    get: function() {
         return this._crawler.crawler;
     }
 });
