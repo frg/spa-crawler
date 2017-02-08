@@ -32,7 +32,7 @@ SPACrawler.prototype.start = function() {
 };
 
 SPACrawler.prototype.startRndr = function() {
-    var args = [path.join(__dirname, './node_modules/rndr-me/server.js')];
+    var args = [require.resolve('rndr-me')];
 
     // Make args like `--key value` for spawned process
     _.each(this.rndrOptions, function(val, key) {
